@@ -76,6 +76,7 @@ int main(int argc, char **argv)
                 for (size_t k = 1; k <= s_task_params.N + 1; k++)
                     MakeStep(current, prev, i, j, k, x_stride, y_stride);
 
+        #pragma omp parallel for collapse(2)
         for (size_t j = 1; j <= s_task_params.N + 1; j++)
         {
             for (size_t k = 1; k <= s_task_params.N + 1; k++)
@@ -85,6 +86,7 @@ int main(int argc, char **argv)
             }
         }
 
+        #pragma omp parallel for collapse(2)
         for (size_t i = 1; i <= s_task_params.N + 1; i++)
         {
             for (size_t k = 1; k <= s_task_params.N + 1; k++)
@@ -94,6 +96,7 @@ int main(int argc, char **argv)
             }
         }
 
+        #pragma omp parallel for collapse(2)
         for (size_t i = 1; i <= s_task_params.N + 1; i++)
         {
             for (size_t j = 1; j <= s_task_params.N + 1; j++)
