@@ -15,7 +15,7 @@ void TaskParamsInit(int argc, char **argv)
     s_task_params.K = 10;
     s_task_params.N = 128;
 
-    s_task_params.T = 1;
+    s_task_params.T = 0.01;
 
     for (int i = 0; i < TaskParams::SPACE_DIM; i++)
         s_task_params.L[i] = 1;

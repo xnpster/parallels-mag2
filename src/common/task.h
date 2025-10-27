@@ -1,10 +1,12 @@
 #pragma once
 
-#include <math.h>
+#include <cmath>
+
+using std::size_t;
 
 struct TaskParams
 {
-    static const auto SPACE_DIM = 3;
+    static const int SPACE_DIM = 3;
 
     unsigned long long K, N;
     double T, tau;
@@ -46,9 +48,9 @@ static void FillAnalytical(double *data,
         {
             for (size_t k = 1; k < z_sz - 1; k++)
             {
-                auto x = x0 + (i - 1) * s_task_params.step[0];
-                auto y = y0 + (j - 1) * s_task_params.step[1];
-                auto z = z0 + (k - 1) * s_task_params.step[2]; 
+                double x = x0 + (i - 1) * s_task_params.step[0];
+                double y = y0 + (j - 1) * s_task_params.step[1];
+                double z = z0 + (k - 1) * s_task_params.step[2]; 
 
                 data[i * x_stride + j * y_stride + k] = AnalyticalSolution(x, y, z, ts);
             }
@@ -63,7 +65,7 @@ static void MakeStep(double *next_d, double *curr_d,
 
     double laplace = 0;
 
-    auto point_coord = i * x_stride + j * y_stride + k;
+    size_t point_coord = i * x_stride + j * y_stride + k;
 
     laplace += (curr_d[point_coord - x_stride] + curr_d[point_coord + x_stride]) / s_task_params.step_squared[0];
     laplace += (curr_d[point_coord - y_stride] + curr_d[point_coord + y_stride]) / s_task_params.step_squared[1];
@@ -85,8 +87,8 @@ static double MaxAbsoluteError(double *data_a, double *data_b,
         {
             for (size_t k = 1; k < z_sz - 1; k++)
             {
-                auto p = i * x_stride + j * y_stride + k;
-                auto diff = abs(data_a[p] - data_b[p]);
+                size_t p = i * x_stride + j * y_stride + k;
+                double diff = std::abs(data_a[p] - data_b[p]);
 
                 if (diff > result)
                     result = diff;

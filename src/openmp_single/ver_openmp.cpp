@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <omp.h>
 
 #include "logger.h"
@@ -56,7 +57,6 @@ int main(int argc, char **argv)
     {
         LogWrite("    t = " + to_string(t) + ", ts = " + to_string(ts));
         FillAnalytical(computed_data[t % 2], ts, 0, 0, 0, x_sz, y_sz, z_sz, x_stride, y_stride);
-        LogWrite("    done");
         ts += s_task_params.tau;
     }
 
@@ -105,8 +105,6 @@ int main(int argc, char **argv)
                 current[i * x_stride + j * y_stride + s_task_params.N + 1] = 0;
             }
         }
-        
-        LogWrite("    done");
     }
 
     LogWrite("Compute error...");
@@ -115,5 +113,6 @@ int main(int argc, char **argv)
     auto ae = MaxAbsoluteError(computed_data[t % 2], computed_data[(t + 1) % 2], x_sz, y_sz, z_sz, x_stride, y_stride);
     LogWrite("    max absolute error: " + to_string(ae));
 
+    LogWrite("Free data...");
     FreeData();
 }
