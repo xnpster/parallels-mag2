@@ -39,23 +39,20 @@ static void FillAnalytical(double *data,
                            size_t x_sz, size_t y_sz, size_t z_sz,
                            size_t x_stride, size_t y_stride)
 {
-    double x = x0, y, z;
+    #pragma omp parallel for collapse(3)
     for (size_t i = 1; i < x_sz - 1; i++)
     {
-        y = y0;
         for (size_t j = 1; j < y_sz - 1; j++)
         {
-            z = z0;
             for (size_t k = 1; k < z_sz - 1; k++)
             {
+                auto x = x0 + (i - 1) * s_task_params.step[0];
+                auto y = y0 + (j - 1) * s_task_params.step[1];
+                auto z = z0 + (k - 1) * s_task_params.step[2]; 
+
                 data[i * x_stride + j * y_stride + k] = AnalyticalSolution(x, y, z, ts);
-                z += s_task_params.step[2];
             }
-
-            y += s_task_params.step[1];
         }
-
-        x += s_task_params.step[0];
     }
 }
 
@@ -75,23 +72,24 @@ static void MakeStep(double *next_d, double *curr_d,
     next_d[point_coord] = s_task_params.c1 * laplace + s_task_params.c2 * curr_d[point_coord] - next_d[point_coord];
 }
 
-static double SquaredError(double *data_a, double *data_b,
-                           size_t x_sz, size_t y_sz, size_t z_sz)
+static double MaxAbsoluteError(double *data_a, double *data_b,
+                               size_t x_sz, size_t y_sz, size_t z_sz,
+                               size_t x_stride, size_t y_stride)
 {
     double result = 0;
 
+#pragma omp parallel for collapse(3) reduction(max : result)
     for (size_t i = 1; i < x_sz - 1; i++)
     {
         for (size_t j = 1; j < y_sz - 1; j++)
         {
             for (size_t k = 1; k < z_sz - 1; k++)
             {
-                auto diff = *data_a - *data_b;
+                auto p = i * x_stride + j * y_stride + k;
+                auto diff = abs(data_a[p] - data_b[p]);
 
-                result += diff * diff;
-
-                data_a++;
-                data_b++;
+                if (diff > result)
+                    result = diff;
             }
         }
     }

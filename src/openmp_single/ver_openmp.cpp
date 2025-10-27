@@ -101,8 +101,8 @@ int main(int argc, char **argv)
         {
             for (size_t j = 1; j <= s_task_params.N + 1; j++)
             {
-                    current[i * x_stride + j * y_stride + 1] = 0;
-                    current[i * x_stride + j * y_stride + s_task_params.N + 1] = 0;
+                current[i * x_stride + j * y_stride + 1] = 0;
+                current[i * x_stride + j * y_stride + s_task_params.N + 1] = 0;
             }
         }
         
@@ -112,8 +112,8 @@ int main(int argc, char **argv)
     LogWrite("Compute error...");
 
     FillAnalytical(computed_data[(t + 1) % 2], ts, 0, 0, 0, x_sz, y_sz, z_sz, x_stride, y_stride);
-    auto resid = SquaredError(computed_data[t % 2], computed_data[(t + 1) % 2], x_sz, y_sz, z_sz);
-    LogWrite("    resid: " + to_string(sqrt(resid)));
+    auto ae = MaxAbsoluteError(computed_data[t % 2], computed_data[(t + 1) % 2], x_sz, y_sz, z_sz, x_stride, y_stride);
+    LogWrite("    max absolute error: " + to_string(ae));
 
     FreeData();
 }
