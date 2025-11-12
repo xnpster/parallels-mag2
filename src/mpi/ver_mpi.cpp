@@ -44,6 +44,8 @@ void Init(int argc, char **argv)
 	ReadOmpOptions(argc, argv);
 	TaskParamsInit(argc, argv);
 
+	LogWrite("P: " + to_string(world_size));
+
 	// split linear space into 3D grid
 	for (int i = 0; i < TaskParams::SPACE_DIM; i++)
 		dim_procs[i] = 0;
@@ -321,10 +323,14 @@ void UpdateShadow(double *data)
 
 void ComputeError(size_t t)
 {
-	LogWrite("Compute error...");
+	// not really needed, sync here for honest estimation of iteration time
+	MPI_Barrier(cart);
+	LogWrite("Fill analytical solution...");
 
 	FillAnalytical(computed_data[t % 2], s_task_params.tau * (t - 1), s[0], s[1], s[2],
 	               sz[0], sz[1], sz[2], stride[0], stride[1]);
+
+	LogWrite("Compute error...");
 
 	auto local_error = MaxAbsoluteError(computed_data[(t - 1) % 2], computed_data[t % 2], sz[0], sz[1], sz[2], stride[0],
 	                                    stride[1]);
