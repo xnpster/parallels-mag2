@@ -5,3 +5,4 @@ project(supercomputers)
 set(COMMON_PATH ${CMAKE_SOURCE_DIR}/src/common)
 
 add_subdirectory(src/openmp_single)
+add_subdirectory(src/mpi)
