@@ -11,3 +11,7 @@ upload:
 
 test_omp: omp
 	./test_omp.sh
+
+fetch_omp_results:
+	rm -rf omp_tests
+	scp -i ~/.ssh/id_rsa_hpc -r edu-cmc-skmodel25-627-08@polus.hpc.cs.msu.ru:~/project/omp_tests .

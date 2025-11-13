@@ -2,3 +2,4 @@ build
 *.log
 .vscode
 omp
+omp_tests
