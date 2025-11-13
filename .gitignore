@@ -3,3 +3,5 @@ build
 .vscode
 omp
 omp_tests
+mpi
+mpi_tests
