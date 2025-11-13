@@ -187,7 +187,7 @@ void Finalize()
 
 	LogFlush();
 	LogFinalize();
-	MPI_Barrier(MPI_COMM_WORLD);
+	MPI_Barrier(cart);
 	MPI_Finalize();
 }
 
@@ -221,7 +221,6 @@ static inline void CopyEdgeFromShadowBuf(double *data, double *shadow, size_t co
 
 void UpdateShadow(double *data)
 {
-	LogWrite("   updating shadow...");
 	// copy data to send buffers
 	for (int i = 0; i < TaskParams::SPACE_DIM; i++)
 	{
@@ -321,9 +320,6 @@ void UpdateShadow(double *data)
 			                      stride[dim_a], stride[dim_b], stride[recv_dim]);
 		}
 	}
-
-
-	LogWrite("   shadow updated");
 }
 
 void ComputeError(size_t t)
