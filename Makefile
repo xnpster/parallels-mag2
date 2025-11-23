@@ -19,6 +19,9 @@ test_omp: omp
 test_mpi: mpi
 	./test_mpi.sh
 
+test_combined: mpi
+	./test_combined.sh
+
 fetch_omp_results:
 	rm -rf omp_tests
 	scp -i ~/.ssh/id_rsa_hpc -r edu-cmc-skmodel25-627-08@polus.hpc.cs.msu.ru:~/project/omp_tests .
@@ -26,3 +29,7 @@ fetch_omp_results:
 fetch_mpi_results:
 	rm -rf mpi_tests
 	scp -i ~/.ssh/id_rsa_hpc -r edu-cmc-skmodel25-627-08@polus.hpc.cs.msu.ru:~/project/mpi_tests .
+
+fetch_combined_results:
+	rm -rf combined_tests
+	scp -i ~/.ssh/id_rsa_hpc -r edu-cmc-skmodel25-627-08@polus.hpc.cs.msu.ru:~/project/combined_tests .

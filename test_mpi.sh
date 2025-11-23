@@ -5,13 +5,13 @@ test_dir=mpi_tests
 rm -rf ${test_dir}
 mkdir ${test_dir}
 
-for N in 128
+for N in 1024
 do
     for K in 20
     do
-        for procs in 1 4 8 16 32
+        for procs in 1 4 8 12 16 20 24 28 32
         do
-            for L in 1 3.141593
+            for L in 1
             do
                 run_id=run_${procs}_${N}_${K}_${L}
 

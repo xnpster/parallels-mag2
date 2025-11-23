@@ -5,3 +5,4 @@ omp
 omp_tests
 mpi
 mpi_tests
+combined_tests
